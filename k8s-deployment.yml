@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-music
+  namespace: default
+  labels:
+    app: spring-music
+spec:
+  selector:
+    matchLabels:
+      app: spring-music
+  template:
+    metadata:
+      labels:
+        app: spring-music
+    spec:
+      containers:
+      - env:
+        - name: BINDING_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: ace0c077-2544-11e9-8780-42010a84005e
+              name: credentials
+        - name: VCAP_APPLICATION
+          value: '{"cf_api":"https://api.rattle-rib.sapi.cf-app.com","limits":{"fds":16384,"mem":1024,"disk":1024},"application_name":"spring-music-6","application_uris":["spring-music-6-fantastic-civet.rattle-rib.sapi.cf-app.com"],"name":"spring-music-6","space_name":"dev","space_id":"7f020b85-c8c1-4867-b3db-670583467556","uris":["spring-music-6-fantastic-civet.rattle-rib.sapi.cf-app.com"],"application_id":"41be28c6-9e43-47c1-b28e-3801d3453762","version":"6fc74ba3-a5cc-49c4-bf2f-0e7eafaebaec","application_version":"6fc74ba3-a5cc-49c4-bf2f-0e7eafaebaec"}'
+        image: servicesapi/springmusic
+        imagePullPolicy: Always
+        name: spring-music
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+
+
